@@ -1,3 +1,35 @@
+## Manual Deployment
+Public S3 Deployment URL (public access): http://ls-aws-practitioner-js-bucket.s3-website-us-east-1.amazonaws.com/
+
+## Automated Deployment
+
+Private S3 Deployment URL (Requires accessing with Cloudfront): http://deploywebappstack-deploymentfrontendbucket67ceb713-5pjb6feudebl.s3-website-us-east-1.amazonaws.com
+
+CloudFront Deployment URL: https://d3umtqf4xixsm2.cloudfront.net/
+
+# Scripts
+## Deploying the Application
+
+### Build and Deploy
+
+To build and deploy the frontend and infrastructure:
+
+1. Open a terminal in the `infra` directory.
+2. Run:
+
+	```bash
+	npm run deploy
+	```
+
+This will build the frontend, upload it to S3, and invalidate the CloudFront cache automatically.
+
+You can also use:
+
+- `npm run build` – Build the frontend and infrastructure code only
+- `npm run synth` – Synthesize the CloudFormation template
+- `npm run destroy` – Remove the deployed stack from AWS
+
+
 # React-shop-cloudfront
 
 This is frontend starter project for nodejs-aws mentoring program. It uses the following technologies:
@@ -52,7 +84,9 @@ Deploy configured in `serverless.yml` stack via CloudFormation.
 
 ### `cloudfront:domainInfo`
 
+Display cloudfront domain information in console.	
 
+### `cloudfront:invalidateCache`
 
 Invalidate cloudfront cache.
 
