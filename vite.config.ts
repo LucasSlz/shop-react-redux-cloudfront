@@ -19,6 +19,6 @@ export default defineConfig({
     setupFiles: "./src/setupTests.ts",
   },
   build: {
-    outDir: "../infra/resources/build"
+    outDir: "infra/resources/build"
   }
 });
