@@ -5,7 +5,7 @@ Public S3 Deployment URL (public access): http://ls-aws-practitioner-js-bucket.s
 
 Private S3 Deployment URL (Requires accessing with Cloudfront): http://deploywebappstack-deploymentfrontendbucket67ceb713-5pjb6feudebl.s3-website-us-east-1.amazonaws.com
 
-CloudFront Deployment URL: https://d3umtqf4xixsm2.cloudfront.net/
+[CloudFront Deployment URL](https://d2kkkpcvrrwt3j.cloudfront.net/)
 
 # Scripts
 ## Deploying the Application
