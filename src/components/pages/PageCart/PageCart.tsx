@@ -4,6 +4,8 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
 import ReviewCart from "~/components/pages/PageCart/components/ReviewCart";
 import ReviewOrder from "~/components/pages/PageCart/components/ReviewOrder";
 import PaperLayout from "~/components/PaperLayout/PaperLayout";
@@ -43,7 +45,7 @@ const Success = () => (
 const steps = ["Review your cart", "Shipping address", "Review your order"];
 
 export default function PageCart() {
-  const { data = [] } = useCart();
+  const { data = [], isLoading, error } = useCart();
   const { mutate: submitOrder } = useSubmitOrder();
   const invalidateCart = useInvalidateCart();
   const [activeStep, setActiveStep] = React.useState<CartStep>(
@@ -98,40 +100,61 @@ export default function PageCart() {
           </Step>
         ))}
       </Stepper>
-      {isCartEmpty && <CartIsEmpty />}
-      {!isCartEmpty && activeStep === CartStep.ReviewCart && (
-        <ReviewCart items={data} />
+      
+      {/* Loading State */}
+      {isLoading && (
+        <Box display="flex" justifyContent="center" alignItems="center" py={4}>
+          <CircularProgress />
+          <Typography sx={{ ml: 2 }}>Loading your cart...</Typography>
+        </Box>
       )}
-      {activeStep === CartStep.Address && (
-        <AddressForm
-          initialValues={address}
-          onBack={handleBack}
-          onSubmit={handleAddressSubmit}
-        />
+      
+      {/* Error State */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          Failed to load cart: {error.message}. Please try again later.
+        </Alert>
       )}
-      {activeStep === CartStep.ReviewOrder && (
-        <ReviewOrder address={address} items={data} />
-      )}
-      {activeStep === CartStep.Success && <Success />}
-      {!isCartEmpty &&
-        activeStep !== CartStep.Address &&
-        activeStep !== CartStep.Success && (
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            {activeStep !== CartStep.ReviewCart && (
-              <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                Back
-              </Button>
+      
+      {/* Cart Content */}
+      {!isLoading && !error && (
+        <>
+          {isCartEmpty && <CartIsEmpty />}
+          {!isCartEmpty && activeStep === CartStep.ReviewCart && (
+            <ReviewCart items={data} />
+          )}
+          {activeStep === CartStep.Address && (
+            <AddressForm
+              initialValues={address}
+              onBack={handleBack}
+              onSubmit={handleAddressSubmit}
+            />
+          )}
+          {activeStep === CartStep.ReviewOrder && (
+            <ReviewOrder address={address} items={data} />
+          )}
+          {activeStep === CartStep.Success && <Success />}
+          {!isCartEmpty &&
+            activeStep !== CartStep.Address &&
+            activeStep !== CartStep.Success && (
+              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                {activeStep !== CartStep.ReviewCart && (
+                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                    Back
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 3, ml: 1 }}
+                  onClick={handleNext}
+                >
+                  {activeStep === steps.length - 1 ? "Place order" : "Next"}
+                </Button>
+              </Box>
             )}
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, ml: 1 }}
-              onClick={handleNext}
-            >
-              {activeStep === steps.length - 1 ? "Place order" : "Next"}
-            </Button>
-          </Box>
-        )}
+        </>
+      )}
     </PaperLayout>
   );
 }
